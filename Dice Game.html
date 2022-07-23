@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <style>
+       body , .card , .card ul{
+           background-color: #244855;
+       }
+       h1 {
+           color: #48B455 !important;
+           font-size: 70px;
+           text-align: center;
+           vertical-align: central;
+           margin-top: 50px !important;
+           margin-bottom: 50px !important;
+       }
+       .btn {
+           background-color: #48B455 !important;
+           color:white;
+       }
+       
+   </style>
+</head>
+<body>
+
+    <div class="modal fade p-0" tabindex="-1" id="modal">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable modal-fullscreen-lg-down p-0 	">
+
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelProtitle">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body h-100 position-relative ">
+
+                    <div class="row row-cols-1 row-cols-sm-2 justify-content-center h-100  ">
+                        
+                        <div class="col py-3 py-md-4 h-100 index">
+                            <form id="form" action="" name="form" method='POST' class="form needs-validation " novalidate>
+
+                                <div class="form-floating">
+                                    <input type="text" required class="form-control d-block my-4 " id="title" placeholder="Title" name="inproduct">
+                                    <label for="title" class="text-danger">Title player1</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input type="text" required class="form-control d-block my-4 "  placeholder="Title" name="inproduct">
+                                    <label for="title" class="text-danger">Title player2</label>
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-secondary">Save</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Let's Play</h1>
+
+    <div  class="container d-flex justify-content-center align-content-center">
+        <div class="row  ">
+            <div class="col-12 col-md-6 mb-5">
+                <div class="card text-center mx-auto mx-md-0" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item fw-bold">player 1</li>
+                        <li id="player1total" class="list-group-item">total score</li>
+                        <li id="player1current" class="list-group-item">current score</li>
+                        <li id="countbaci1" class="list-group-item">The number of attempts left = 10</li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 mb-5">
+                <div class="card text-center mx-auto mx-md-0" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item fw-bold">player 2</li>
+                        <li id="player2total" class="list-group-item">total score</li>
+                        <li id="player2current" class="list-group-item">current score</li>
+                        <li id="countbaci2" class="list-group-item"> The number of attempts left = 10</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class=" mt-md-5 container d-flex justify-content-center align-content-center">
+        <div class="row ">
+
+            <div class="col-6 ">
+                <div class="card " style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li id="play" class="list-group-item btn ">play</li>
+                        <li id="hold" class="list-group-item btn btn  my-3">hold</li>
+                        <li id="newgame" class="list-group-item btn btn ">new game</li>
+                        <li id="result" class="list-group-item btn btn  d-none my-3">result</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var string1 = "total score";
+        var string2 = "current score ";
+
+        var name = "";
+        var num = 0;
+        var count1 = 10;
+        var count2 = 10;
+        var total1 = 0;
+        var total2 = 0;
+        var modal = document.getElementById('modal');
+        var form = document.getElementById('form');
+        var play = document.getElementById('play');
+        var rolldice = document.getElementById('rolldice');
+        var hold = document.getElementById('hold');
+        var newgame = document.getElementById('newgame');
+        var playertotal = document.getElementById('player1total');
+        var playercurrent = document.getElementById('player1current');
+        var hold = document.getElementById('hold');
+        var newgame = document.getElementById('newgame');
+        var playertotal2 = document.getElementById('player2total');
+        var playercurrent2 = document.getElementById('player2current');
+        var title = document.getElementById('title');
+        var countbaci1 = document.getElementById('countbaci1');
+        var countbaci2 = document.getElementById('countbaci2');
+        var result = document.getElementById('result');
+        window.addEventListener('load', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('modal'), {
+                keyboard: false
+            })
+
+            myModal.show(true);
+        });
+        play.addEventListener('click', function () {
+            random = Math.floor(Math.random() * 5) + 1;
+            if ((count1 <= 1 && count2 == 0) || (count1 == 0 && count2 <= 1)) {
+
+                if (count1 == 1 ) {
+                    if (random != 1) {
+                        total1 = total1 + random;
+                        count1 = 0;
+                        playertotal.textContent = `${string1} ${total1}`;
+                    }
+                    else {
+                        total1 = total1 ;
+                        count1 = 0;
+                        playertotal.textContent = `${string1} ${total1}`;;
+                    }
+                    
+                }
+
+                else if (count2 == 1) {
+                    if (random != 1) {
+                        total2 = total1 + random;
+                        count2 = 0;
+                        playertotal2.textContent = `${string1} ${total2}`;;
+                    }
+                    else {
+                        total2 = total1;
+                        count2 = 0;
+                        playertotal2.textContent = `${string1}${total2}`;;
+                    }
+                    
+
+                }
+
+
+                
+                countbaci1.textContent = `The number of attempts left 0`;
+                countbaci2.textContent = `The number of attempts left 0`;
+
+                play.textContent = "Result";
+                play.addEventListener('click', result);
+                function result() {
+                    if (total1 == total2) {
+
+                        Swal.fire({
+                            position: 'center-center',
+                            icon: 'success',
+                            title: `Draw`,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+
+                    }
+
+                    if (total1 < 30 && total2 < 30) {
+                        Swal.fire({
+                            position: 'center-center',
+                            icon: 'success',
+                            title: `Unfortunately, none of the players got the winning points`,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    }
+
+
+                    else {
+
+                        if (total1 > total2) {
+                            Swal.fire({
+                                position: 'center-center',
+                                icon: 'success',
+                                title: `${playertotal.previousElementSibling.textContent} is win`,
+                                showConfirmButton: false,
+                                timer: 2000
+
+                            })
+                        }
+                        else if (total1 < total2) {
+                            Swal.fire({
+                                position: 'center-center',
+                                icon: 'success',
+                                title: `${playertotal2.previousElementSibling.textContent} is win`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+
+
+
+                        }
+
+
+                    }
+
+
+
+
+
+
+                }
+
+               
+            }
+            else {
+                if (count1 != 0 || count2 != 0) {
+                    if (random != 1) {
+                        Swal.fire({
+                            title: 'Good!',
+                            text: `You got ${random} points `,
+                            imageUrl: `images/${random}.png`,
+                            imageWidth: 400,
+                            imageHeight: 200,
+                            imageAlt: 'Custom image',
+                        })
+                            
+                       
+
+                        if (count1 > 0) {
+                            if (num == 0) {
+
+                                total1 += random;
+                                playertotal.textContent = `${string1} ${total1}`;
+                                count1 = count1 - 1;
+                                countbaci1.textContent = `The number of attempts left ${count1}`;
+                                playercurrent.textContent = `${string2} ${random}`; 
+                            }
+
+                            //player1
+
+
+                        }
+                        else num = 1;
+
+
+                        if (count2 > 0) {
+                            if (num == 1) {
+
+                                total2 += random;
+                                count2 = count2 - 1;
+                                playertotal2.textContent = `${string1} ${total2}`;;
+                                countbaci2.textContent = `The number of attempts left ${count2}`;
+                                playercurrent2.textContent = `${string2} ${random}`;
+                            }
+
+                            //player2
+
+                        }
+                        else num = 0;
+
+
+                    }
+                    else {
+                        if (num == 0) {
+                            if (count2 == 0) {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Unfortunately you did not get points, keep playing',
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                })
+                            }
+                            else {
+                                num = 1;
+                                if (count1>0)
+                                count1 = count1 - 1;
+                                countbaci1.textContent = `The number of attempts left ${count1}`;
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Unfortunately you did not get points, move to the other player',
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                })
+                            }
+
+
+                            
+                           
+
+                        }
+                        else {
+                            if (count1 == 0) {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Unfortunately you did not get points, keep playing',
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                })
+                            }
+                            else {
+                                num = 0;
+                                if (count2 > 0)
+                                count2 = count2 - 1;
+                                countbaci2.textContent = `The number of attempts left ${count2}`;
+
+                                countbaci2.textContent = `The number of attempts left ${count2}`;
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Unfortunately you did not get points, move to the other player',
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                })
+                            }
+
+
+                            
+
+                        }
+
+                    }
+                }
+                
+            }
+            
+
+            
+
+
+
+        });
+        hold.addEventListener('click', function () {
+
+            if (num == 0) {
+                if (count2 == 0) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'The number of attempts of the other player has expired',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                }
+                else {
+                    num = 1;
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Move to the other player',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                }
+                
+            }
+            else {
+                if (count1 == 0) {
+                    Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'The number of attempts of the other player has expired',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                }
+                else {
+                    num = 0;
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Move to the other player',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                }
+
+            }
+
+               
+            
+
+           
+
+       
+
+        });
+        newgame.addEventListener('click', function () {
+            num = 0;
+            total1 = 0;
+            total2 = 0;
+            count1 = 10;
+            count2 = 10;
+            play.textContent = "Play";
+
+            playercurrent.textContent = `${string2} 0`;
+            playertotal.textContent = `${string1} 0`;
+            playercurrent2.textContent = `${string2} 0`;
+            playertotal2.textContent = `${string1} 0`;
+            countbaci1.textContent = `The number of attempts left 10`;
+            countbaci2.textContent = `The number of attempts left 10`;
+            var myModal = new bootstrap.Modal(document.getElementById('modal'), {
+                keyboard: false
+            })
+
+            myModal.show(true);
+            
+        });
+        form.addEventListener('submit', function (event) {
+            event.preventDefault()
+            event.stopPropagation()
+
+            form.classList.add('was-validated')
+            if (form.checkValidity()) {
+                playertotal.previousElementSibling.textContent = title.value;
+           playertotal2.previousElementSibling.textContent = title.parentElement.nextElementSibling.firstElementChild.value;
+         
+
+            }
+
+        }, false)
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
